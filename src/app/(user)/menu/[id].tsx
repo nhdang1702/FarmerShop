@@ -1,23 +1,24 @@
-import { View, Text , Image, StyleSheet} from "react-native";
+import { View, Text , Image, StyleSheet, ActivityIndicator} from "react-native";
 import React from "react";
 import { useLocalSearchParams, Stack } from "expo-router";
-import products from "@assets/data/products";
 import { defaultImage } from "@/components/ProductListItem";
 import { useState } from "react";
 import Button from "@/components/Button";
 import { useCart } from "@/providers/CartProvider";
 import { useRouter } from "expo-router";
+import { useProduct } from "@/api/products";
 const sizes = ['S', 'M', 'L', 'XL'];
 
 const ProductDetailsScreen = () => {
-    const { id } = useLocalSearchParams();
+    const { id: idString } = useLocalSearchParams();
+    const id = parseFloat(typeof idString === 'string' ? idString : idString[0]);
+    const { data: product, error, isLoading} = useProduct(id);
     const {addItem} = useCart();
 
     const router = useRouter();
     
 
     const [selectedSize, setSeltectedSize] = useState('M')
-    const product = products.find((p) => p.id.toString() == id);
 
     const addToCart = () => {
         if(!product) {
@@ -27,26 +28,24 @@ const ProductDetailsScreen = () => {
         router.push('/cart');
     }
 
-    if (!product) {
-        return <Text>Product not found</Text>
+    if(isLoading) {
+        return <ActivityIndicator/>;
+    };
+    if(error) {
+        return <Text>Fail to fetch products</Text>
     }
     return(
         <View style = {styles.container}>
             <Stack.Screen options={{title: product.name}}/>
             <Image style={styles.image} source ={{uri: product.image || defaultImage}}/>
 
-            <Text> Select size</Text>
-            <View style={styles.sizes}>
-                {sizes.map((size) => (
-                    <View style={styles.size}>
-                        <Text style={styles.sizeText} key={size}>{size}</Text>
-                    </View>
-                ))}
+            
+
+
+            <Text style={styles.price}>Giá:  {product.price} VNĐ</Text>
+            <View style={{marginTop: 150}}>
+                <Button onPress={addToCart} text="Thêm vào giỏ hàng"/>
             </View>
-
-
-            <Text style={styles.price}>{product.price} VNĐ</Text>
-            <Button onPress={addToCart} text="Thêm vào giỏ hàng"/>
         </View>
     )
 };

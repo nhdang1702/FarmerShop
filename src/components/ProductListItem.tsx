@@ -14,7 +14,7 @@ const ProductListItem = ({product} : ProductListItemProps ) => {
         <Pressable style={styles.container}>
           <Image style={styles.image} source={{uri: product.image || defaultImage }} resizeMode="contain"/>
           <Text>{product.name}</Text>
-          <Text>{product.price}</Text>
+          <Text>{product.price} VNĐ</Text>
         </Pressable>
       </Link>
     )
@@ -22,10 +22,11 @@ const ProductListItem = ({product} : ProductListItemProps ) => {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+      flex: 0.5,
       padding: 10,
       borderRadius: 20,     
       backgroundColor: 'white',
+      maxWidth: '50%'
     },
     title: {
       fontSize: 20,

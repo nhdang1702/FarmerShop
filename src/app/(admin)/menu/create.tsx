@@ -1,25 +1,44 @@
 import { View, Text, StyleSheet, TextInput, Image, Alert, Pressable} from 'react-native';
 import Button from '@/components/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { defaultImage } from '@/components/ProductListItem';
 import Colors from '@/constants/Colors';
 import * as ImagePicker from 'expo-image-picker';
-import { useLocalSearchParams, Stack } from 'expo-router';
+import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
+import { useDeleteProduct, useInsertProduct, useProduct, useUpdateProduct } from '@/api/products';
 
 
 const CreateProductScreen = () => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
+    const [description, setDescription] = useState('');
     const [errors, setErrors] = useState('');
     const [image, setImage] = useState<string | null>(null);
     
-    const { id } = useLocalSearchParams();
+    const { id: idString } = useLocalSearchParams();
+    const id = parseFloat(typeof idString === 'string' ? idString : idString[0]);
     const isUpdating = !!id;
+    const { mutate: insertProduct} = useInsertProduct();
+    const { mutate: updateProduct} = useUpdateProduct();
+    const {data: updatingProduct} = useProduct(id);
+    const { mutate: deleteProduct} = useDeleteProduct();
 
+
+    const router = useRouter();
+
+    useEffect(() => {
+        if(updatingProduct) {
+            setName(updatingProduct.name);
+            setPrice(updatingProduct.price.toString());
+            setImage(updatingProduct.image);
+            setDescription(updatingProduct.description);
+        }
+    }, [updatingProduct])
 
     const resetFields = () => {
         setName('');
         setPrice('');
+        setDescription('');
     };
 
     const onSubmit = () => {
@@ -35,16 +54,33 @@ const CreateProductScreen = () => {
             return;
         }
         console.warn("Creating Product", name);
-        resetFields();
+        insertProduct({name, price: parseInt(price) ,image, description}, {
+            onSuccess: () => {
+                resetFields();
+                router.back();
+
+            }
+        });
+
     };
     const onUpdate = () => {
         if(!validateInput()) {
             return;
         }
+        updateProduct({id ,name, price: parseInt(price), image, description}, {
+            onSuccess: () => {
+                resetFields();
+                router.back();
+            }
+        })
         console.warn("Update Product", name);
         resetFields();
     };
     const onDelete = () => {
+        deleteProduct(id, {onSuccess: () => {
+            resetFields();
+            router.replace('/(admin)');
+        }})
         console.warn('DELETE!');
     }
 
@@ -112,6 +148,12 @@ const CreateProductScreen = () => {
                 style={styles.input} 
                 keyboardType='numeric'/>
             <Text style={{color: 'red'}}>{errors}</Text>
+            <Text style={styles.label}>Mô tả</Text>
+            <TextInput
+                placeholder="Mô tả" 
+                style={styles.input}
+                value={description}
+                onChangeText={setDescription}/>
             <Button onPress={onSubmit} text={isUpdating ? 'Cập nhật sản phẩm' : 'Tạo sản phẩm'}/>
             {isUpdating && <Pressable onPress={confirmDelete} style={styles.deleteContainer}><Text style={styles.delete}>Xóa sản phẩm</Text></Pressable>}
         </View>
