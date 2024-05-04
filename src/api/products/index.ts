@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Tables } from "@/types";
 export const useProductList = () => {
     return useQuery({
         queryKey: ['products'],
@@ -38,7 +39,7 @@ export const useInsertProduct = () => {
             name: data.name,
             image: data.image,
             price: data.price,
-            descripton: data.descripton,
+            
           })
           .single();
   

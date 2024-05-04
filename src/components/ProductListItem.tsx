@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
-import { Product } from '@assets/types';
 import { Link, useSegments } from 'expo-router';
+import { Tables } from '@/types';
 export const defaultImage = "https://dulichkhampha24.com/wp-content/uploads/2020/09/pizza-ha-noi.jpg";
 type ProductListItemProps = {
-    product: Product
+    product: Tables<'products'>;
 }
 const ProductListItem = ({product} : ProductListItemProps ) => {
   const segments = useSegments();

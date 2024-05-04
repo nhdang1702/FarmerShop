@@ -7,7 +7,9 @@ export default function OrderListNavigator() {
     return (
        <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
            <TopTabs>
-            <TopTabs.Screen name='index' options={{title: 'Active'}}/>
+            <TopTabs.Screen name='index' options={{title: 'Chưa xử lý'}}/>
+            <TopTabs.Screen name='archive' options={{title: 'Đã hoàn thành'}}/>
+
            </TopTabs>
        </SafeAreaView>
     );

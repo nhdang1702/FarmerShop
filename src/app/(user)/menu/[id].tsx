@@ -7,7 +7,6 @@ import Button from "@/components/Button";
 import { useCart } from "@/providers/CartProvider";
 import { useRouter } from "expo-router";
 import { useProduct } from "@/api/products";
-const sizes = ['S', 'M', 'L', 'XL'];
 
 const ProductDetailsScreen = () => {
     const { id: idString } = useLocalSearchParams();
@@ -18,21 +17,23 @@ const ProductDetailsScreen = () => {
     const router = useRouter();
     
 
-    const [selectedSize, setSeltectedSize] = useState('M')
-
     const addToCart = () => {
         if(!product) {
             return;
         }
         addItem(product);
         router.push('/cart');
-    }
+    };
 
     if(isLoading) {
         return <ActivityIndicator/>;
     };
     if(error) {
         return <Text>Fail to fetch products</Text>
+    };
+
+    if (!product) {
+        return <ActivityIndicator />;
     }
     return(
         <View style = {styles.container}>

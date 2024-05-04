@@ -1,25 +1,43 @@
 import orders from "@assets/data/orders";
 import { useLocalSearchParams, Stack } from "expo-router";
-import { Text, View, FlatList, Pressable } from "react-native";
+import { Text, View, FlatList, Pressable, ActivityIndicator } from "react-native";
 import OrderListItem from "@/components/OrderListItem";
 import OrderItemListItem from "@/components/OrderItemListItem";
-import { OrderStatusList } from "@assets/types";
+import { OrderStatusList } from "@/types";
 import Colors from "@/constants/Colors";
-export default function OrderDetailsScreen() {
-    const { id } = useLocalSearchParams();
+import { useOrderDetails, useUpdateOrder } from "@/api/orders";
 
-    const order = orders.find((o) => o.id.toString() === id);
+
+export default function OrderDetailsScreen() {
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(typeof idString === 'string' ? idString : idString[0]);
+  const {data: order, isLoading, error} = useOrderDetails(id);
+  const { mutate: updateOrder} = useUpdateOrder();
+
+  const updateStatus = (status:string) => {
+    updateOrder({id: id,updatedFields: {status} })
+  }
+
+  if(isLoading) {
+      return <ActivityIndicator/>
+
+  }
+  if(error) {
+      return <Text>Failed to fetch</Text>
+  }
 
     if (!order) {
         return(<Text>Not Found</Text>)
     }
     return (
         <View style={{padding: 10, gap: 20}}>
-            <Stack.Screen options={{title: `Order #${id}`}}/>
-            <OrderListItem order={order}/>
+            <Stack.Screen options={{title: `Đơn hàng #${id}`}}/>
+            
             <FlatList 
                 data={order.order_items}
                 renderItem={({item}) => <OrderItemListItem item={item}/>}
+                contentContainerStyle={{ gap: 10 }}
+                ListHeaderComponent={() => <OrderListItem order={order} />}
                 ListFooterComponent={() => (
                     <>
                       <Text style={{ fontWeight: 'bold' }}>Status</Text>
@@ -27,7 +45,7 @@ export default function OrderDetailsScreen() {
                         {OrderStatusList.map((status) => (
                           <Pressable
                             key={status}
-                            onPress={() => console.warn('Update')}
+                            onPress={() => updateStatus(status)}
                             style={{
                               borderColor: Colors.light.tint,
                               borderWidth: 1,

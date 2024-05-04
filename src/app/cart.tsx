@@ -6,7 +6,7 @@ import CartListItem from '@/components/CartListItem';
 import Button from '@/components/Button';
 
 const CartScreen = () => {
-    const {items, total} = useCart();
+    const {items, total, checkout} = useCart();
     return (
         <View style={{padding: 10}}>
             <FlatList 
@@ -14,7 +14,7 @@ const CartScreen = () => {
                 renderItem={({item}) => <CartListItem cartItem={item}/>}
                 contentContainerStyle={{padding: 10, gap: 10}}/>
             <Text style={{ color: 'orange', marginTop: 20, fontSize: 17, fontWeight: '600'}}>Tổng cộng: {total} VNĐ</Text>
-            <Button  text="Đặt hàng" />
+            <Button onPress={checkout}  text="Đặt hàng" />
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
 
         </View>

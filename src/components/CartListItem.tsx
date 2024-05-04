@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import React from 'react';
 import Colors from '../constants/Colors';
-import { CartItem } from '@assets/types';
+import { CartItem } from '@/types';
 import { Link } from 'expo-router';
 import { defaultImage } from './ProductListItem';
 import { FontAwesome } from '@expo/vector-icons';
@@ -23,7 +23,7 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>{cartItem.product.name}</Text>
         <View style={styles.subtitleContainer}>
-          <Text style={styles.price}>${cartItem.product.price.toFixed(2)}</Text>
+          <Text style={styles.price}>{cartItem.product.price} VNĐ</Text>
         </View>
       </View>
       <View style={styles.quantitySelector}>

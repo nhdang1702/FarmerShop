@@ -3,8 +3,6 @@ import ProductListItem from '@components/ProductListItem';
 import { useProductList } from '@/api/products';
 
 
-
-
 export default function MenuScreen() {
   const {data: products, error, isLoading} = useProductList();
   if (isLoading){
@@ -25,8 +23,6 @@ export default function MenuScreen() {
 
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {

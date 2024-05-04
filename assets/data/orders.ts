@@ -1,4 +1,4 @@
-import { Order } from '../../assets/types';
+import { Order } from '../../src/types';
 import products from './products';
 import dayjs from 'dayjs';
 

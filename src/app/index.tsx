@@ -21,10 +21,7 @@ const index = () => {
         <Button text="User" />
       </Link>
       <Link href={'/(admin)'} asChild>
-        <Button text="Admin" />
-      </Link>
-      <Link href={'/(auth)/sign-up'} asChild>
-        <Button text="SignUp" />
+        <Button text="Gian hàng của tôi" />
       </Link>
       <Button onPress={() => supabase.auth.signOut()} text="Đăng xuất" />
     </View>
