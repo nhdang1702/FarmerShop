@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import React from 'react';
 import Colors from '../constants/Colors';
-import { CartItem } from '@/types';
+import { CartItem } from '../types';
 import { Link } from 'expo-router';
 import { defaultImage } from './ProductListItem';
 import { FontAwesome } from '@expo/vector-icons';

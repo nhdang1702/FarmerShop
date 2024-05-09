@@ -1,5 +1,5 @@
-import { supabase } from '@/lib/supabase';
-import { InsertTables } from '@/types';
+import { supabase } from '../../lib/supabase';
+import { InsertTables } from '../../types';
 import { useMutation } from '@tanstack/react-query';
 
 export const useInsertOrderItems = () => {

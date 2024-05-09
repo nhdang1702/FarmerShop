@@ -1,5 +1,4 @@
-import { Database } from "@/database.types";
-
+import { Database } from "./database.types";
 export type Tables<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Row'];
 export type InsertTables<T extends keyof Database['public']['Tables']> =
@@ -34,6 +33,17 @@ export const OrderStatusList: OrderStatus[] = [
   'Shipping',
   'Completed',
 ];
+
+export type FarmItem ={
+  id: number,
+  name: string,
+  image: string,
+  address: string,
+  description: string,
+  user_id: number,
+  product_item?: Product[];
+
+}
 
 export type OrderStatus = 'New' | 'Shipping' | 'Completed';
 

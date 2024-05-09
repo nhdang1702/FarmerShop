@@ -5,7 +5,7 @@ export const defaultImage = "https://dulichkhampha24.com/wp-content/uploads/2020
 type ProductListItemProps = {
     product: Tables<'products'>;
 }
-const ProductListItem = ({product} : ProductListItemProps ) => {
+const ProductListItemAdmin = ({product} : ProductListItemProps ) => {
   const segments = useSegments();
   const productRoute = `/${segments[0]}/menu/${product.id}` as `${string}:${string}`;
   const formatPrice = (price:number) => {
@@ -15,9 +15,13 @@ const ProductListItem = ({product} : ProductListItemProps ) => {
     return(
       <Link href={productRoute} asChild>
         <Pressable style={styles.container}>
-          <Image style={styles.image} source={{uri: product.image || defaultImage }} resizeMode="contain"/>
-          <Text>{product.name}</Text>
-          <Text>{formatPrice(product.price)} VNĐ</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.dish}>{product.name}</Text>
+            <Text style={styles.dishText}>{product.description}</Text>
+            <Text style={styles.priceText}>{formatPrice(product.price)} VNĐ</Text>
+          </View>
+        <Image source={{uri: product.image || defaultImage }} resizeMode="contain" style={styles.dishImage} />
+          
         </Pressable>
       </Link>
     )
@@ -25,11 +29,9 @@ const ProductListItem = ({product} : ProductListItemProps ) => {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 0.5,
-      padding: 10,
-      borderRadius: 20,     
-      backgroundColor: 'white',
-      maxWidth: '50%'
+      backgroundColor: '#fff',
+      padding: 16,
+      flexDirection: 'row',
     },
     title: {
       fontSize: 20,
@@ -43,8 +45,29 @@ const styles = StyleSheet.create({
     image: {
       aspectRatio: 1,
       width: '100%'
-    }
+    },
+    dishImage: {
+      height: 80,
+      width: 80,
+      borderRadius: 4,
+    },
+    dish: {
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    dishText: {
+      fontSize: 14,
+      color: 'grey',
+      paddingVertical: 4,
+    },
+    priceText: {
+      fontSize: 14,
+      color: 'orange',
+      paddingVertical: 4,
+      fontWeight: "600",
+
+    },
   });
 
-  export default ProductListItem;
+  export default ProductListItemAdmin;
   

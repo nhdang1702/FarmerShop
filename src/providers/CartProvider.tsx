@@ -1,9 +1,9 @@
-import { CartItem, Tables } from "@/types";
+import { CartItem, Tables } from "../types";
 import { PropsWithChildren, createContext, useContext, useState } from "react";
 import { randomUUID } from "expo-crypto";
-import { useInsertOrder } from "@/api/orders";
+import { useInsertOrder, useInsertOrder2 } from "../api/orders";
 import { useRouter } from "expo-router";
-import { useInsertOrderItems } from "@/api/order-items";
+import { useInsertOrderItems } from "../api/order-items";
 type Product = Tables<'products'>;
 
  const CartContext = createContext<CartType>({
@@ -25,7 +25,7 @@ type CartType = {
 const CartProvider = ({children}: PropsWithChildren) => {
     const [items, setItems] = useState<CartItem[]>([]);
     const router = useRouter();
-    const {mutate: insertOrder} = useInsertOrder();
+    const {mutate: insertOrder} = useInsertOrder2();
     const {mutate: insertOrderItems} = useInsertOrderItems();
 
 

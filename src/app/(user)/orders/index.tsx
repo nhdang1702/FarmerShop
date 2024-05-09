@@ -1,5 +1,5 @@
-import { useMyOrderList } from "@/api/orders";
-import OrderListItem from "@/components/OrderListItem";
+import { useMyOrderList, useOrderByFarm } from "../../../api/orders";
+import OrderListItem from "../../../components/OrderListItem";
 import { Text,View, FlatList , ActivityIndicator} from "react-native";
 
 export default function OrdersScreen() {

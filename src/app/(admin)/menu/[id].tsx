@@ -1,18 +1,23 @@
 import { View, Text , Image, StyleSheet, Pressable} from "react-native";
 import React from "react";
 import { useLocalSearchParams, Stack, Link } from "expo-router";
-import { defaultImage } from "@/components/ProductListItem";
+import { defaultImage } from "../../../components/ProductListItem";
 import { useState } from "react";
-import Button from "@/components/Button";
-import { useCart } from "@/providers/CartProvider";
+import Button from "../../../components/Button";
+import { useCart } from "../../../providers/CartProvider";
 import { useRouter } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import Colors from "@/constants/Colors";
-import { useProduct } from "@/api/products";
+import Colors from "../../../constants/Colors";
+import { useProduct } from "../../../api/products";
 
 const ProductDetailsScreen = () => {
+    const formatPrice = (price:number) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); // Insert spaces every three digits
+      };
     const { id: idString } = useLocalSearchParams();
-    const id = parseFloat(typeof idString === 'string' ? idString : idString[0]);
+    const id = parseFloat((typeof idString === 'string' ? idString : idString?.[0]) || 'NaN');
+
+
     const { data: product, error, isLoading} = useProduct(id);
     const {addItem} = useCart();
 
@@ -53,11 +58,11 @@ const ProductDetailsScreen = () => {
             ),}}/>
             <Stack.Screen options={{title: product.name}}/>
             <Image style={styles.image} source ={{uri: product.image || defaultImage}}/>
-
+            <Text style={styles.productInfo}>{product.description}</Text>
             
 
 
-            <Text style={styles.price}>{product.price} VNĐ</Text>
+            <Text style={styles.price}>Giá:  {formatPrice(product.price)} VNĐ</Text>
         </View>
     )
 };
@@ -94,6 +99,15 @@ const styles = StyleSheet.create({
     sizeText: {
         fontSize:20,
         fontWeight: '500'
+    },
+    productName: {
+        fontSize:24,
+        fontWeight: 'bold',
+    },
+    productInfo: {
+      fontSize: 14,
+      color: 'grey',
+      paddingVertical: 4,
     }
 
 })

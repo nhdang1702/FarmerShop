@@ -5,9 +5,9 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from '../components/useColorScheme';
-import CartProvider from '@/providers/CartProvider';
-import AuthProvider from '@/providers/AuthProvider';
-import QueryProvider from '@/providers/QueryProvider';
+import CartProvider from '../providers/CartProvider';
+import AuthProvider from '../providers/AuthProvider';
+import QueryProvider from '../providers/QueryProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,7 +50,7 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DefaultTheme}>
       <AuthProvider>
           <QueryProvider>
             <CartProvider>

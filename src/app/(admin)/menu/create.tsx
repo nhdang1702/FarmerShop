@@ -1,5 +1,5 @@
-import Button from '@/components/Button';
-import Colors from '@/constants/Colors';
+import Button from '../../../components/Button';
+import Colors from '../../../constants/Colors';
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Image, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -7,11 +7,12 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   useDeleteProduct,
   useInsertProduct,
+  useInsertProduct2,
   useProduct,
   useUpdateProduct,
-} from '@/api/products';
+} from '../../../api/products';
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '../../../lib/supabase';
 
 
 const CreateProductScreen = () => {
@@ -22,12 +23,19 @@ const CreateProductScreen = () => {
   const [image, setImage] = useState<string | null>(null);
 
   const { id: idString } = useLocalSearchParams();
-  const id = parseFloat(
-    typeof idString === 'string' ? idString : idString?.[0]
-  );
+  let id;
+    if (typeof idString === 'string') {
+        id = parseFloat(idString);
+    } else if (Array.isArray(idString) && idString.length > 0) {
+        id = parseFloat(idString[0]);
+    } else {
+        // Handle the case where idString is undefined or an empty array
+        // For example, you could set a default value for id
+        id = 0; // or any other default value that makes sense in your context
+    }
   const isUpdating = !!idString;
 
-  const { mutate: insertProduct } = useInsertProduct();
+  const { mutate: insertProduct } = useInsertProduct2();
   const { mutate: updateProduct } = useUpdateProduct();
   const { data: updatingProduct } = useProduct(id);
   const { mutate: deleteProduct } = useDeleteProduct();
@@ -81,7 +89,7 @@ const CreateProductScreen = () => {
     }
 
     insertProduct(
-      { name, price: parseInt(price), image, description },
+      { name, price: parseInt(price), image, description, },
       {
         onSuccess: () => {
           resetFields();

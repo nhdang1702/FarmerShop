@@ -1,9 +1,9 @@
-import { useAdminOrderList } from "@/api/orders";
-import OrderListItem from "@/components/OrderListItem";
+import { useAdminOrderList, useOrderByFarm2, useOrderByFarm3 } from "../../../../api/orders";
+import OrderListItem from "../../../../components/OrderListItem";
 import { Text,View, FlatList, ActivityIndicator } from "react-native";
 export default function OrdersScreen() {
 
-    const {data: orders, isLoading, error} = useAdminOrderList({archived :false});
+    const {data: orders, isLoading, error} = useOrderByFarm3({archived :false});
 
     if(isLoading) {
         return <ActivityIndicator/>
