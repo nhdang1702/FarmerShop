@@ -9,6 +9,9 @@ type OrderItemListItemProps = {
 };
 
 const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
+  const formatPrice = (price:number) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); // Insert spaces every three digits
+  };
   return (
     <View style={styles.container}>
       <Image
@@ -19,7 +22,7 @@ const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>{item.products.name}</Text>
         <View style={styles.subtitleContainer}>
-          <Text style={styles.price}>{item.products.price * item.quantity} VNĐ</Text>
+          <Text style={styles.price}>{formatPrice(item.products.price * item.quantity)} VNĐ</Text>
           
         </View>
       </View>

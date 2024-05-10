@@ -8,6 +8,9 @@ import { useOrderDetails, useUpdateOrder } from "../../../api/orders";
 
 
 export default function OrderDetailsScreen() {
+  const formatPrice = (price:number) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); // Insert spaces every three digits
+  };
   const { id: idString } = useLocalSearchParams();
   const id = parseFloat((typeof idString === 'string' ? idString : idString?.[0]) || 'NaN');
 
@@ -41,7 +44,8 @@ export default function OrderDetailsScreen() {
                 ListHeaderComponent={() => <OrderListItem order={order} />}
                 ListFooterComponent={() => (
                     <>
-                      <Text style={{ fontWeight: 'bold' }}>Status</Text>
+                      <Text style={{fontSize: 18, marginLeft: 150, color: 'orange' , fontWeight: 'bold'}}>Tổng cộng: {formatPrice(order.total)} VNĐ</Text>
+                      <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Trạng thái đơn hàng</Text>
                       <View style={{ flexDirection: 'row', gap: 5 }}>
                         {OrderStatusList.map((status) => (
                           <Pressable
@@ -55,14 +59,14 @@ export default function OrderDetailsScreen() {
                               marginVertical: 10,
                               backgroundColor:
                                 order.status === status
-                                  ? Colors.light.tint
+                                  ? 'green'
                                   : 'transparent',
                             }}
                           >
                             <Text
                               style={{
                                 color:
-                                  order.status === status ? 'white' : Colors.light.tint,
+                                  order.status === status ? 'white' : "black",
                               }}
                             >
                               {status}

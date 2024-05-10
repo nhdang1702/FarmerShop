@@ -11,7 +11,9 @@ type Product = Tables<'products'>;
     addItem: () => {},
     updateQuantity: () => {},
     total: 0,
-    checkout: () => {}
+    checkout: () => {},
+    
+
  });
 
 type CartType = {
@@ -20,12 +22,14 @@ type CartType = {
     updateQuantity: (itemId: string, amount: -1 | 1) => void;
     total: number
     checkout: () => void
+    
+
 }
 
 const CartProvider = ({children}: PropsWithChildren) => {
     const [items, setItems] = useState<CartItem[]>([]);
     const router = useRouter();
-    const {mutate: insertOrder} = useInsertOrder2();
+    const {mutate: insertOrder} = useInsertOrder();
     const {mutate: insertOrderItems} = useInsertOrderItems();
 
 
@@ -41,7 +45,9 @@ const CartProvider = ({children}: PropsWithChildren) => {
             id: randomUUID(),
             product,
             product_id: product.id,
-            quantity: 1
+            quantity: 1,
+            farm_id: product.farm_id,
+           
 
         };
         setItems([newCartItem, ...items]);
@@ -60,6 +66,8 @@ const CartProvider = ({children}: PropsWithChildren) => {
       };
 
     const total = items.reduce((sum, item) => (sum += item.product.price * item.quantity),0);
+    const farm_id = items.length > 0 ? items[0].farm_id : 0;
+
 
     const clearCart = () => {
         setItems([]);
@@ -67,7 +75,7 @@ const CartProvider = ({children}: PropsWithChildren) => {
 
     const checkout = () => {
         insertOrder(
-            {total},
+            {total, farm_id}, 
             {
             onSuccess: saveOrderItems,
             }

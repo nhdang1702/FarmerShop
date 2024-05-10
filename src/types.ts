@@ -16,6 +16,7 @@ export type Product = {
   name: string;
   price: number;
   description: string | null;
+  farm_id: number | null;
 
 };
 
@@ -26,6 +27,7 @@ export type CartItem = {
   product: Product;
   product_id: number;
   quantity: number;
+  farm_id: number | null;
 };
 
 export const OrderStatusList: OrderStatus[] = [
