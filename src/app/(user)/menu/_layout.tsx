@@ -2,11 +2,15 @@ import { Stack, Link } from "expo-router";
 import { Pressable } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../../../constants/Colors";
+import Header from "@/components/Header";
 export default function MenuStack() {
     return( 
     <Stack screenOptions={{
+      
         headerRight: () => (
+            
             <Link href="/cart" asChild>
+              
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -20,7 +24,7 @@ export default function MenuStack() {
             </Link>
           ),
     }}>
-        <Stack.Screen name="index" options={{title: 'Menu'}}/>
+        <Stack.Screen name="index" options={{title: 'Menu', headerShown: false,} }/>
     </Stack>
     );
 }

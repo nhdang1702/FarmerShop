@@ -31,8 +31,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="menu"
         options={{
-          title: 'Menu',
-          tabBarIcon: ({ color }) => <TabBarIcon name="cutlery" color={color} />,
+          title: 'My Farm',
+          tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
           headerShown: false,
           
         }}

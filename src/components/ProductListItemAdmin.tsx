@@ -18,7 +18,7 @@ const ProductListItemAdmin = ({product} : ProductListItemProps ) => {
           <View style={{ flex: 1 }}>
             <Text style={styles.dish}>{product.name}</Text>
             <Text style={styles.dishText}>{product.description}</Text>
-            <Text style={styles.priceText}>{formatPrice(product.price)} VNĐ</Text>
+            <Text style={styles.priceText}>{formatPrice(product.price)} VNĐ/Kg</Text>
           </View>
         <Image source={{uri: product.image || defaultImage }} resizeMode="contain" style={styles.dishImage} />
           
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
       fontSize: 14,
       color: 'grey',
       paddingVertical: 4,
+      paddingRight:2,
     },
     priceText: {
       fontSize: 14,

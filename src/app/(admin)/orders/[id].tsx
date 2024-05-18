@@ -1,10 +1,11 @@
 import { useLocalSearchParams, Stack } from "expo-router";
-import { Text, View, FlatList, Pressable, ActivityIndicator } from "react-native";
+import { Text, View, FlatList, Pressable, ActivityIndicator, StyleSheet } from "react-native";
 import OrderListItem from "../../../components/OrderListItem";
 import OrderItemListItem from "../../../components/OrderItemListItem";
 import { OrderStatusList } from "../../../types";
 import Colors from "../../../constants/Colors";
 import { useOrderDetails, useUpdateOrder } from "../../../api/orders";
+import { useProfileByOrder } from "@/api/profiles";
 
 
 export default function OrderDetailsScreen() {
@@ -16,6 +17,7 @@ export default function OrderDetailsScreen() {
 
 
   const {data: order, isLoading, error} = useOrderDetails(id);
+  const {data: profile} = useProfileByOrder(id);
   const { mutate: updateOrder} = useUpdateOrder();
 
   const updateStatus = (status:string) => {
@@ -30,9 +32,12 @@ export default function OrderDetailsScreen() {
       return <Text>Failed to fetch</Text>
   }
 
-    if (!order) {
-        return(<Text>Not Found</Text>)
-    }
+  if (!order) {
+      return(<Text>Not Found</Text>)
+  }
+  if (!profile) {
+    return(<Text>Not Found</Text>)
+  }
     return (
         <View style={{padding: 10, gap: 20}}>
             <Stack.Screen options={{title: `Đơn hàng #${id}`}}/>
@@ -44,7 +49,14 @@ export default function OrderDetailsScreen() {
                 ListHeaderComponent={() => <OrderListItem order={order} />}
                 ListFooterComponent={() => (
                     <>
-                      <Text style={{fontSize: 18, marginLeft: 150, color: 'orange' , fontWeight: 'bold'}}>Tổng cộng: {formatPrice(order.total)} VNĐ</Text>
+                      <View style={{alignItems: 'flex-end', padding: 5}}>
+                        <Text style={{fontSize: 17, color: 'orange' , fontWeight: 'bold'}}>Tổng cộng: {formatPrice(order.total)} VNĐ</Text>
+                      </View>
+                      <View style={{paddingBottom: 10, paddingTop: 10}}>
+                        <Text style={{fontSize:17,  color:'gray'}}>Người nhận: {profile.name}</Text>
+                        <Text style={{fontSize:17, color:'gray'}}>Địa chỉ: {profile.address}</Text>
+                      </View>
+                      
                       <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Trạng thái đơn hàng</Text>
                       <View style={{ flexDirection: 'row', gap: 5 }}>
                         {OrderStatusList.map((status) => (
@@ -80,3 +92,18 @@ export default function OrderDetailsScreen() {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start', 
+    flexDirection: 'row', 
+  },
+  child: {
+    alignSelf: 'flex-end', // Căn lề sát phải của thành phần con
+    width: 50,
+    height: 50,
+    backgroundColor: 'red',
+  },
+});

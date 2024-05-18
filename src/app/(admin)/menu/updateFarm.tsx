@@ -1,21 +1,23 @@
 import Button from '../../../components/Button';
 import Colors from '../../../constants/Colors';
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, Alert,KeyboardAvoidingView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   useDeleteProduct,
+  useInsertProduct,
   useInsertProduct2,
   useProduct,
   useUpdateProduct,
 } from '../../../api/products';
 
 import { supabase } from '../../../lib/supabase';
+import { useFarm, useFarmAdmin, useUpdateFarm } from '@/api/farms';
 
-const CreateProductScreen = () => {
+const UpdateFarmScreen = () => {
   const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
+  const [address, setAddress] = useState('');
   const [description, setDescription] = useState<string | null>('');
   const [errors, setErrors] = useState('');
   const [image, setImage] = useState<string | null>(null);
@@ -34,25 +36,24 @@ const CreateProductScreen = () => {
   const isUpdating = !!idString;
 
   const { mutate: insertProduct } = useInsertProduct2();
-  const { mutate: updateProduct } = useUpdateProduct();
-  const { data: updatingProduct } = useProduct(id);
-  const { mutate: deleteProduct } = useDeleteProduct();
+  const { mutate: updateFarm } = useUpdateFarm();
+  const { data: updatingFarm } = useFarmAdmin();
 
   const router = useRouter();
 
   useEffect(() => {
-    if (updatingProduct) {
-      setName(updatingProduct.name);
-      setPrice(updatingProduct.price.toString());
-      setImage(updatingProduct.image);
-      setDescription(updatingProduct.description);
+    if (updatingFarm) {
+      setName(updatingFarm.name);
+      setAddress(updatingFarm.address);
+      setImage(updatingFarm.image);
+      setDescription(updatingFarm.description);
 
     }
-  }, [updatingProduct]);
+  }, [updatingFarm]);
 
   const resetFields = () => {
     setName('');
-    setPrice('');
+    setAddress('');
     setDescription('');
   };
 
@@ -62,53 +63,29 @@ const CreateProductScreen = () => {
       setErrors('Name is required');
       return false;
     }
-    if (!price) {
-      setErrors('Price is required');
-      return false;
-    }
-    if (isNaN(parseInt(price))) {
-      setErrors('Price is not a number');
+    if (!address) {
+      setErrors('Address is required');
       return false;
     }
     return true;
   };
 
   const onSubmit = () => {
-    if (isUpdating) {
-      onUpdate();
-    } else {
-      onCreate();
-    }
+    console.log("Hello");
   };
 
-  const onCreate = async () => {
-    if (!validateInput()) {
-      return;
-    }
-    insertProduct(
-      { name, price: parseInt(price), image, description, },
-      {
-        onSuccess: () => {
-          resetFields();
-          router.back();
-        },
-      }
-    );
-  };
 
   const onUpdate = async () => {
     if (!validateInput()) {
       return;
     }
-
-    
-
-    updateProduct(
-      { id, name, price: parseFloat(price), image, description },
+    updateFarm(
+      { name, address, image, description },
       {
         onSuccess: () => {
           resetFields();
           router.back();
+          console.log("Update!")
         },
       }
     );
@@ -119,7 +96,7 @@ const CreateProductScreen = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4,3],
       quality: 1,
     });
 
@@ -128,27 +105,9 @@ const CreateProductScreen = () => {
     }
   };
 
-  const onDelete = () => {
-    deleteProduct(id, {
-      onSuccess: () => {
-        resetFields();
-        router.replace('/(admin)');
-      },
-    });
-  };
+  
 
-  const confirmDelete = () => {
-    Alert.alert('Confirm', 'Are you sure you want to delete this product', [
-      {
-        text: 'Cancel',
-      },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: onDelete,
-      },
-    ]);
-  };
+
 
   
 
@@ -157,23 +116,22 @@ const CreateProductScreen = () => {
   return (
     
     <View style={styles.container}>
-        <Stack.Screen options={{title: isUpdating ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'}}/>
+        <Stack.Screen options={{title: 'Chỉnh sửa'}}/>
         <Image source={{uri: image || "https://cdn.pixabay.com/photo/2017/11/10/05/24/add-2935429_960_720.png"}} style={styles.image}  />
         <Text style={styles.textButton} onPress={pickImage}>Thêm ảnh</Text>
-        <Text style={styles.label}>Tên sản phẩm</Text>
+        <Text style={styles.label}>Tên cửa hàng</Text>
         <TextInput
-            placeholder="Tên sản phẩm" 
+            placeholder="Tên cửa hàng" 
             style={styles.input}
             value={name}
             onChangeText={setName}/>
 
-        <Text style={styles.label}>Giá (VNĐ/Kg)</Text>
+        <Text style={styles.label}>Địa chỉ</Text>
         <TextInput 
-            value={price}
-            onChangeText={setPrice}
-            placeholder="Giá" 
-            style={styles.input} 
-            keyboardType='numeric'/>
+            value={address}
+            onChangeText={setAddress}
+            placeholder="Địa chỉ" 
+            style={styles.input} />
         <Text style={{color: 'red'}}>{errors}</Text>
         <Text style={styles.label}>Mô tả</Text>
         <TextInput
@@ -181,16 +139,14 @@ const CreateProductScreen = () => {
             style={styles.input}
             value={description ?? ''}
             onChangeText={setDescription}/>
-        <Button onPress={onSubmit} text={isUpdating ? 'Cập nhật sản phẩm' : 'Tạo sản phẩm'}/>
-        {isUpdating && (<Text onPress={confirmDelete} style={styles.textButton}>
-                            Ẩn sản phẩm
-                        </Text>)}
+        <Button onPress={onUpdate} text={'Cập nhật'}/>
+        
     </View>
     
 );
 };
 
-export default CreateProductScreen;
+export default UpdateFarmScreen;
 const styles = StyleSheet.create({
     container: {
         flex:1,

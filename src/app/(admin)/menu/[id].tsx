@@ -24,8 +24,6 @@ const ProductDetailsScreen = () => {
     const router = useRouter();
     
 
-    const [selectedSize, setSeltectedSize] = useState('M')
-
 
     const addToCart = () => {
         if(!product) {
@@ -62,7 +60,10 @@ const ProductDetailsScreen = () => {
             
 
 
-            <Text style={styles.price}>Giá:  {formatPrice(product.price)} VNĐ</Text>
+            <Text style={styles.priceView}>
+                <Text style={styles.price}>Giá: {formatPrice(product.price)} VNĐ</Text>
+                <Text> /Kg </Text>
+            </Text>
         </View>
     )
 };
@@ -79,7 +80,8 @@ const styles = StyleSheet.create({
     },
     price: {
         fontSize: 19,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: '#000000',
     },
     sizes:{
         flexDirection: 'row',
@@ -108,7 +110,11 @@ const styles = StyleSheet.create({
       fontSize: 14,
       color: 'grey',
       paddingVertical: 4,
-    }
+    },
+    priceView: {
+        fontSize: 19,
+        color: '#A1A1A1',
+      },
 
 })
 export default ProductDetailsScreen;

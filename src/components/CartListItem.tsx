@@ -34,7 +34,7 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
           style={{ padding: 5 }}
         />
 
-        <Text style={styles.quantity}>{cartItem.quantity}</Text>
+        <Text style={styles.quantity}>{cartItem.quantity} kg</Text>
         <FontAwesome
           onPress={() => updateQuantity(cartItem.id, 1)}
           name="plus"

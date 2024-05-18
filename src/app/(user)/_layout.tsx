@@ -26,33 +26,43 @@ export default function TabLayout() {
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
       }}>
-      <Tabs.Screen name="farm" 
-        options={{
-        headerShown: false,
-        title:'Home' ,
-        tabBarIcon: ({ color }) => <TabBarIcon name="cutlery" color={color} />,
-         
-
-      }}/>
+        
+      
       <Tabs.Screen name="index" options={{href: null}}/>  
       <Tabs.Screen
         name="menu"
         options={{
-          title: 'Menu',
-          tabBarIcon: ({ color }) => <TabBarIcon name="cutlery" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerShown: false,
           
         }}
       />
+      <Tabs.Screen name="farm" 
+        options={{
+        headerShown: false,
+        title:'Farm' ,
+        tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
+         
+
+      }}/>
       <Tabs.Screen
         name="orders"
         
         options={{
-          title: 'Orders',
+          title: 'Đơn hàng',
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="cart-plus" color={color} />,
         }}
       />
+      <Tabs.Screen name="profile" 
+        options={{
+        headerShown: false,
+        title:'Tôi' ,
+        tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+         
+
+      }}/>
       
     </Tabs>
   );

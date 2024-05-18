@@ -149,3 +149,47 @@ export const useProductListByFarm = (farmId:number) => {
       },
     });
 };
+
+export const useProductByFarm = () => {
+  const queryClient = useQueryClient();
+  const { session } = useAuth();
+  const userId = session?.user.id;
+
+  return useQuery({
+    queryKey: ['products', { userId }],
+    queryFn: async () => {
+      if (!userId) return null;
+
+      // Fetch the farm ID associated with the user
+      const { data: farmData, error: farmError } = await supabase
+        .from('farms')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      if (farmError) {
+        throw new Error(farmError.message);
+      }
+      const farmId = farmData.id;
+
+      
+
+      // Fetch products associated with the farm ID
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('farm_id', farmId);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return data;
+    },
+  });
+};
+
+
+
+
+

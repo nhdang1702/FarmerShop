@@ -47,7 +47,7 @@ const ProductDetailsScreen = () => {
             <View style={{padding: 10}}>
                 <Text style={styles.productName}>{product.name}</Text>
                 <Text style={styles.productInfo}>{product.description}</Text>
-                <Text style={styles.price}>Giá:  {formatPrice(product.price)} VNĐ</Text>
+                <Text style={styles.price}>Giá:  {formatPrice(product.price)} VNĐ/Kg</Text>
             </View>
             
             <View style={{marginTop: 100}}>
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         aspectRatio: 1,
+        borderRadius: 55,
     },
     price: {
         fontSize: 18,
